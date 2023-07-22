@@ -1,5 +1,6 @@
 package br.com.bfelix.OneToOne.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PessoaEnderecoDTO {
+public class PessoaDTO {
 
 	private String nome;
-	private EnderecoDTO enderecoDTO;
+	@JsonProperty("endereco")
+	private EnderecoDTO endereco;
 }

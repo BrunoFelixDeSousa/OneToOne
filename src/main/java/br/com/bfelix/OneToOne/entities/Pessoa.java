@@ -25,7 +25,7 @@ public class Pessoa {
 	private Long id;
 	
 	private String nome;
-	
+
 	@OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Endereco endereco;
 }
