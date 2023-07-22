@@ -11,6 +11,7 @@ import br.com.bfelix.OneToOne.repositories.PessoaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
@@ -54,5 +55,30 @@ public class PessoaService {
 		}
 
 		return pessoasDTO;
+	}
+
+	public PessoaDTO buscarPessoaComEndereco(Long pessoaId) {
+		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(pessoaId);
+
+		if (pessoaOptional.isPresent()) {
+			Pessoa pessoa = pessoaOptional.get();
+			Endereco endereco = pessoa.getEndereco();
+
+			PessoaDTO pessoaDTO = new PessoaDTO();
+			pessoaDTO.setNome(pessoa.getNome());
+
+			if (endereco != null) {
+				EnderecoDTO enderecoDTO = new EnderecoDTO(endereco.getRua(), endereco.getCidade(), endereco.getEstado());
+
+				pessoaDTO.setEndereco(enderecoDTO);
+			}
+
+			return pessoaDTO;
+
+		} else {
+			return null;
+		}
+
+
 	}
 }
