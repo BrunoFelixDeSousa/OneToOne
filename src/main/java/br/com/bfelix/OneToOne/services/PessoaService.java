@@ -98,4 +98,46 @@ public class PessoaService {
 			return false;
 		}
 	}
+
+	public boolean atualizarPessoaComContato(Long pessoaId, PessoaDTO pessoaDTO) {
+		// Verificar se a pessoa existe no banco de dados
+		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(pessoaId);
+
+		if (pessoaOptional.isPresent()) {
+			Pessoa pessoa = pessoaOptional.get();
+
+			// Atualizar os dados da pessoa com base no objeto PessoaDTO
+			pessoa.setNome(pessoaDTO.getNome());
+
+			// Verificar se o endereço está presente no objeto PessoaDTO
+			if (pessoaDTO.getEndereco() != null) {
+				// Verificar se a pessoa já possui um endereço associado
+				if (pessoa.getEndereco() != null) {
+					// Se já tiver um endereço associado, atualizar os dados do endereço
+					Endereco endereco = pessoa.getEndereco();
+					endereco.setRua(pessoaDTO.getEndereco().getRua());
+					endereco.setCidade(pessoaDTO.getEndereco().getCidade());
+					endereco.setEstado(pessoaDTO.getEndereco().getEstado());
+				} else {
+					// Se não tiver um endereço associado, criar um novo endereço
+					Endereco novoEndereco = new Endereco();
+					novoEndereco.setRua(pessoaDTO.getEndereco().getRua());
+					novoEndereco.setCidade(pessoaDTO.getEndereco().getCidade());
+					novoEndereco.setEstado(pessoaDTO.getEndereco().getEstado());
+
+					// Associar o novo endereço à pessoa
+					pessoa.setEndereco(novoEndereco);
+				}
+			} else {
+				// Se o objeto PessoaDTO não tiver informações de endereço,
+				// verificamos se a pessoa possui um endereço associado e o removemos.
+				pessoa.setEndereco(null);
+			}
+
+			// Salvar as alterações no banco de dados
+			pessoaRepository.save(pessoa);
+			return true; // Indicar que a atualização foi bem-sucedida
+		}
+		return false; // Indicar que a pessoa com o ID especificado não foi encontrada
+	}
 }
