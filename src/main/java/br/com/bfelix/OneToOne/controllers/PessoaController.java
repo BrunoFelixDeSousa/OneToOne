@@ -50,13 +50,24 @@ public class PessoaController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> buscarPessoa(@PathVariable("id") Long id) {
+	public ResponseEntity<Object> buscarPessoa(@PathVariable(value = "id") Long id) {
 		PessoaDTO pessoaDTO = pessoaService.buscarPessoaComEndereco(id);
 
 		if (pessoaDTO != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(pessoaDTO);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa Não encontrado!");
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> deletarPessoa(@PathVariable(value = "id") Long id) {
+		boolean deletado = pessoaService.deletarPessoaComEndereco(id);
+
+		if (deletado) {
+			return ResponseEntity.status(HttpStatus.OK).body("Pessoa e endereço deletados com sucesso.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encotrado.");
 		}
 	}
 

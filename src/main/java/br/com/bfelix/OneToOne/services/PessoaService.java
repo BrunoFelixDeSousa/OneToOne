@@ -81,4 +81,21 @@ public class PessoaService {
 
 
 	}
+
+	public boolean deletarPessoaComEndereco(Long pessoaId) {
+		Optional<Pessoa> pessoaOptional = pessoaRepository.findById(pessoaId);
+
+		if (pessoaOptional.isPresent()) {
+			Pessoa pessoa = pessoaOptional.get();
+
+			if (pessoa.getEndereco() != null) {
+				enderecoRepository.delete(pessoa.getEndereco());
+			}
+
+			pessoaRepository.delete(pessoa);
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
